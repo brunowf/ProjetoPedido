@@ -1,43 +1,73 @@
 package br.senai.sc.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Produto implements Serializable {
+public class Cidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	private Double preco;
 	
-	@ManyToMany
-	@JoinTable(name = "PRODUTO_CATEGORIA",
-			joinColumns = @JoinColumn(name="produto_id"),
-			inverseJoinColumns = @JoinColumn(name="categoria_id"))
-	private List<Categoria> categorias = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name="estado_id")
+	private Estado estado;
 	
-	public Produto(Integer id, String nome, Double preco) {
+	public Cidade() {
+		
+	}
+	
+	
+
+	public Cidade(String nome) {
+		super();
+		this.nome = nome;
+	}
+
+
+
+	public Cidade(Integer id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.preco = preco;
+	}
+	
+	
+
+
+	
+
+
+
+	public Cidade(Integer id, String nome, Estado estado) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.estado = estado;
 	}
 
-	public Produto() {
-		super();
+
+
+	public Estado getEstado() {
+		return estado;
 	}
+
+
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -55,22 +85,7 @@ public class Produto implements Serializable {
 		this.nome = nome;
 	}
 
-	public Double getPreco() {
-		return preco;
-	}
 
-	public void setPreco(Double preco) {
-		this.preco = preco;
-	}
-
-	
-	public List<Categoria> getCategorias() {
-		return categorias;
-	}
-
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
-	}
 
 	@Override
 	public int hashCode() {
@@ -80,6 +95,8 @@ public class Produto implements Serializable {
 		return result;
 	}
 
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -88,7 +105,7 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Cidade other = (Cidade) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -99,4 +116,5 @@ public class Produto implements Serializable {
 	
 	
 	
+
 }
