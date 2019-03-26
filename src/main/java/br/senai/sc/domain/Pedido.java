@@ -1,67 +1,31 @@
 package br.senai.sc.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
-public class Cidade implements Serializable {
+public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
-	
-	@ManyToOne
-	@JoinColumn(name="estado_id")
-	private Estado estado;
-	
-	public Cidade() {
-		
-	}
-	
+	private Date instante;
 	
 
-	public Cidade(String nome) {
-		super();
-		this.nome = nome;
+	public Pedido() {
 	}
 
-
-
-	public Cidade(Integer id, String nome) {
+	public Pedido(Integer id, Date instante) {
 		super();
 		this.id = id;
-		this.nome = nome;
+		this.instante = instante;
 	}
-	
-
-	public Cidade(Integer id, String nome, Estado estado) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.estado = estado;
-	}
-
-
-
-	public Estado getEstado() {
-		return estado;
-	}
-
-
-
-	public void setEstado(Estado estado) {
-		this.estado = estado;
-	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -71,15 +35,13 @@ public class Cidade implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public Date getInstante() {
+		return instante;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setInstante(Date instante) {
+		this.instante = instante;
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -89,8 +51,6 @@ public class Cidade implements Serializable {
 		return result;
 	}
 
-
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -99,7 +59,7 @@ public class Cidade implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cidade other = (Cidade) obj;
+		Pedido other = (Pedido) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -107,8 +67,6 @@ public class Cidade implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
 
+	
 }

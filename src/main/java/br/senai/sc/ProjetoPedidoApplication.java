@@ -1,5 +1,7 @@
 package br.senai.sc;
 
+import java.text.SimpleDateFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,11 +9,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.senai.sc.domain.Categoria;
 import br.senai.sc.domain.Cidade;
+import br.senai.sc.domain.Cliente;
+import br.senai.sc.domain.Endereco;
 import br.senai.sc.domain.Estado;
+import br.senai.sc.domain.Pedido;
 import br.senai.sc.domain.Produto;
+import br.senai.sc.domain.enums.TipoCliente;
 import br.senai.sc.repositories.CategoriaRepositories;
 import br.senai.sc.repositories.CidadeRepositories;
+import br.senai.sc.repositories.ClienteRepositories;
+import br.senai.sc.repositories.EnderecoRepositories;
 import br.senai.sc.repositories.EstadoRepositories;
+import br.senai.sc.repositories.PedidoRepositories;
 import br.senai.sc.repositories.ProdutoRepositories;
 
 @SpringBootApplication
@@ -32,9 +41,21 @@ public class ProjetoPedidoApplication implements CommandLineRunner{
 	
 	@Autowired
 	private CidadeRepositories cidadeRepo;
+	
+	@Autowired
+	private EnderecoRepositories enderecoRepo;
+	
+	@Autowired
+	private PedidoRepositories pedidoRepo;
+
+	@Autowired
+	private ClienteRepositories clienteRepo;
+	
 
 	@Override
 	public void run(String... args) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
 		Categoria cat1 = new Categoria(null, "informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
 		
@@ -61,6 +82,19 @@ public class ProjetoPedidoApplication implements CommandLineRunner{
 		est1.getCidades().add(c1);
 		est2.getCidades().add(c2);
 		est2.getCidades().add(c3);
+
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		
+		Endereco e1 = new Endereco(null, "Rua flores", "300", "Apto 203", "Jardim", "38220834",c1,cli1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012",c2,cli1);
+		cli1.getTelefones().add("27363323");
+		cli1.getTelefones().add("93838393");
+		
+		cli1.getEnderecos().add(e1);
+		cli1.getEnderecos().add(e2);
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"));
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"));
 		
 		categoriaRepo.save(cat1);
 		categoriaRepo.save(cat2);
@@ -72,6 +106,11 @@ public class ProjetoPedidoApplication implements CommandLineRunner{
 		cidadeRepo.save(c1);
 		cidadeRepo.save(c2);
 		cidadeRepo.save(c3);
+		clienteRepo.save(cli1);
+		enderecoRepo.save(e1);
+		enderecoRepo.save(e2);
+		pedidoRepo.save(ped1);
+		pedidoRepo.save(ped2);
 	}
 
 }
