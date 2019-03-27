@@ -12,14 +12,20 @@ import br.senai.sc.domain.Cidade;
 import br.senai.sc.domain.Cliente;
 import br.senai.sc.domain.Endereco;
 import br.senai.sc.domain.Estado;
+import br.senai.sc.domain.ItemPedido;
+import br.senai.sc.domain.PagamentoComBoleto;
+import br.senai.sc.domain.PagamentoComCartao;
 import br.senai.sc.domain.Pedido;
 import br.senai.sc.domain.Produto;
+import br.senai.sc.domain.enums.EstadoPagamento;
 import br.senai.sc.domain.enums.TipoCliente;
 import br.senai.sc.repositories.CategoriaRepositories;
 import br.senai.sc.repositories.CidadeRepositories;
 import br.senai.sc.repositories.ClienteRepositories;
 import br.senai.sc.repositories.EnderecoRepositories;
 import br.senai.sc.repositories.EstadoRepositories;
+import br.senai.sc.repositories.ItemPedidoRepositories;
+import br.senai.sc.repositories.PagamentoRepositories;
 import br.senai.sc.repositories.PedidoRepositories;
 import br.senai.sc.repositories.ProdutoRepositories;
 
@@ -51,7 +57,13 @@ public class ProjetoPedidoApplication implements CommandLineRunner{
 	@Autowired
 	private ClienteRepositories clienteRepo;
 	
-
+	@Autowired
+	private ItemPedidoRepositories itempedidoRepo;
+	
+	@Autowired
+	private PagamentoRepositories pagamentoRepo;
+	
+	
 	@Override
 	public void run(String... args) throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -93,8 +105,21 @@ public class ProjetoPedidoApplication implements CommandLineRunner{
 		cli1.getEnderecos().add(e1);
 		cli1.getEnderecos().add(e2);
 		
-		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"));
-		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"));
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"),cli1,e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"),cli1,e2);
+		
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.0, 1, 2000.0);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		PagamentoComCartao pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+		
+		PagamentoComBoleto pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sd.parse("20/10/2017"), null); 
+		ped2.setPagamento(pagto2);
 		
 		categoriaRepo.save(cat1);
 		categoriaRepo.save(cat2);
@@ -111,6 +136,10 @@ public class ProjetoPedidoApplication implements CommandLineRunner{
 		enderecoRepo.save(e2);
 		pedidoRepo.save(ped1);
 		pedidoRepo.save(ped2);
+		itempedidoRepo.save(ip1);
+		itempedidoRepo.save(ip2);
+		itempedidoRepo.save(ip3);
+		pagamentoRepo.save(pagto1);
 	}
 
 }
